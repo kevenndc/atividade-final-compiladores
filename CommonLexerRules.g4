@@ -27,4 +27,5 @@ INTVAL: [0-9]+;
 FLOATVAL: [0-9]+'.'[0-9]+;
 STRINGVAL: '"'(.)*?'"';
 NEWLINE: '\r'? '\n';
+COMMENT: '/*' .*? '*/' -> skip;
 WS: [ \t]+ -> skip;

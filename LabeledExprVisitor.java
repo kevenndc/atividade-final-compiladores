@@ -30,12 +30,19 @@ public interface LabeledExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitInitVariables(LabeledExprParser.InitVariablesContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code initConstants}
+	 * Visit a parse tree produced by the {@code initExprConst}
 	 * labeled alternative in {@link LabeledExprParser#stat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitInitConstants(LabeledExprParser.InitConstantsContext ctx);
+	T visitInitExprConst(LabeledExprParser.InitExprConstContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code initStrConst}
+	 * labeled alternative in {@link LabeledExprParser#stat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInitStrConst(LabeledExprParser.InitStrConstContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code printExpr}
 	 * labeled alternative in {@link LabeledExprParser#stat}.
@@ -44,12 +51,12 @@ public interface LabeledExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPrintExpr(LabeledExprParser.PrintExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code printStringVal}
+	 * Visit a parse tree produced by the {@code printStringConcat}
 	 * labeled alternative in {@link LabeledExprParser#stat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPrintStringVal(LabeledExprParser.PrintStringValContext ctx);
+	T visitPrintStringConcat(LabeledExprParser.PrintStringConcatContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code assignStr}
 	 * labeled alternative in {@link LabeledExprParser#stat}.
@@ -164,18 +171,25 @@ public interface LabeledExprVisitor<T> extends ParseTreeVisitor<T> {
 	T visitString(LabeledExprParser.StringContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code concatString}
-	 * labeled alternative in {@link LabeledExprParser#str_val}.
+	 * labeled alternative in {@link LabeledExprParser#str_concat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitConcatString(LabeledExprParser.ConcatStringContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code evalToString}
-	 * labeled alternative in {@link LabeledExprParser#str_val}.
+	 * Visit a parse tree produced by the {@code evalConcat}
+	 * labeled alternative in {@link LabeledExprParser#str_concat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitEvalToString(LabeledExprParser.EvalToStringContext ctx);
+	T visitEvalConcat(LabeledExprParser.EvalConcatContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code stringValConcat}
+	 * labeled alternative in {@link LabeledExprParser#str_concat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStringValConcat(LabeledExprParser.StringValConcatContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code evalGreat}
 	 * labeled alternative in {@link LabeledExprParser#cond}.

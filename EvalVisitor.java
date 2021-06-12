@@ -22,16 +22,12 @@ public class EvalVisitor extends LabeledExprBaseVisitor<Value> {
         memory.put(id, null);
         typeMap.put(id, type);
 
-        System.out.println("variável = " + id);
-
         for (LabeledExprParser.Multi_var_initContext var : ctx.multi_var_init()) {
             id = visit(var).asString();
 
             if (memory.containsKey(id)) {
                 throw new RuntimeException("A variável " + id + " já foi declarada");
             }
-
-            System.out.println("variável = " + id);
 
             memory.put(id, null);
             typeMap.put(id, type);
@@ -41,35 +37,35 @@ public class EvalVisitor extends LabeledExprBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitInitConstants(LabeledExprParser.InitConstantsContext ctx) {
+    public Value visitInitExprConst(LabeledExprParser.InitExprConstContext ctx) {
         String id = ctx.ID().getText();
         String type = ctx.type.getText();
-
-        System.out.println("Entrou nas constantes");
+        Value value = visit(ctx.expr());
 
         if (memory.containsKey(id)) {
             throw new RuntimeException("A variável " + id + " já foi declarada");
         }
 
-        memory.put(id, null);
+        memory.put(id, value);
         typeMap.put(id, type);
         constants.put(id, true);
 
-        System.out.println("variável = " + id);
+        return Value.VOID;
+    }
 
-        for (LabeledExprParser.Multi_var_initContext var : ctx.multi_var_init()) {
-            id = visit(var).asString();
+    @Override
+    public Value visitInitStrConst(LabeledExprParser.InitStrConstContext ctx) {
+        String id = ctx.ID().getText();
+        String type = ctx.type.getText();
+        Value value = visit(ctx.str_val());
 
-            if (memory.containsKey(id)) {
-                throw new RuntimeException("A variável " + id + " já foi declarada");
-            }
-
-            System.out.println("variável = " + id);
-
-            memory.put(id, null);
-            typeMap.put(id, type);
-            constants.put(id, true);
+        if (memory.containsKey(id)) {
+            throw new RuntimeException("A variável " + id + " já foi declarada");
         }
+
+        memory.put(id, value);
+        typeMap.put(id, type);
+        constants.put(id, true);
 
         return Value.VOID;
     }
@@ -111,8 +107,6 @@ public class EvalVisitor extends LabeledExprBaseVisitor<Value> {
             throw new RuntimeException("A variável '" + id + "' não foi inicializada.");
         }
 
-        System.out.println(memory.get(id));
-
         if (constants.containsKey(id) && memory.get(id) != null) {
             throw new RuntimeException("A variável " + id + " não pose ser redeclarada pois ela é uma CONSTANTE.");
         }
@@ -132,6 +126,11 @@ public class EvalVisitor extends LabeledExprBaseVisitor<Value> {
     public Value visitPrintExpr(LabeledExprParser.PrintExprContext ctx) {
         Value value = visit(ctx.expr());
 
+        if (value.isString()) {
+            System.out.println("\"" + String.valueOf(value) + "\"");
+            return Value.VOID;
+        }
+
         System.out.println(String.valueOf(value));
 
         return Value.VOID;
@@ -139,10 +138,10 @@ public class EvalVisitor extends LabeledExprBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitPrintStringVal(LabeledExprParser.PrintStringValContext ctx) {
-        Value value = visit(ctx.str_val());
+    public Value visitPrintStringConcat(LabeledExprParser.PrintStringConcatContext ctx) {
+        Value value = visit(ctx.str_concat());
 
-        System.out.println(String.valueOf(value));
+        System.out.println("\"" + String.valueOf(value) + "\"");
 
         return Value.VOID;
 
@@ -326,18 +325,10 @@ public class EvalVisitor extends LabeledExprBaseVisitor<Value> {
     @Override
     public Value visitConcatString(LabeledExprParser.ConcatStringContext ctx) {
         
-        String left = visit(ctx.str_val(0)).asString();
-        String right = visit(ctx.str_val(1)).asString();
-
-        System.out.println("left = " + left);
-        System.out.println("right = " + right);
+        String left = visit(ctx.str_concat(0)).asString();
+        String right = visit(ctx.str_concat(1)).asString();
 
         return new Value(left + right);
-    }
-
-    @Override
-    public Value visitEvalToString(LabeledExprParser.EvalToStringContext ctx) {
-        return visit(ctx.val());
     }
 
 }

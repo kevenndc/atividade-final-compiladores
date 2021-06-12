@@ -10,9 +10,10 @@ multi_var_init
 
 stat
     : type=(INT | FLOAT | STRING) ID multi_var_init* PTVIG NEWLINE  # initVariables
-    | CONST type=(INT | FLOAT | STRING) ID multi_var_init* PTVIG NEWLINE  # initConstants
+    | CONST type=(INT | FLOAT | STRING) ID EQ expr NEWLINE # initExprConst
+    | CONST type=(INT | FLOAT | STRING) ID EQ str_val NEWLINE # initStrConst
     | PRINT APAREN expr FPAREN NEWLINE # printExpr
-    | PRINT APAREN str_val FPAREN NEWLINE # printStringVal
+    | PRINT APAREN str_concat FPAREN NEWLINE # printStringConcat
     | ID EQ str_val NEWLINE # assignStr
     | ID EQ expr NEWLINE # assignExpr
     | NEWLINE # blank
@@ -41,8 +42,12 @@ val
 
 str_val
     : STRINGVAL # string
-    | str_val ADD str_val # concatString
-    | val # evalToString
+    ;
+
+str_concat
+    : str_concat ADD str_concat # concatString
+    | str_val # stringValConcat
+    | val # evalConcat
     ;
 
 cond
