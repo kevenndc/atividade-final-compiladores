@@ -1,0 +1,59 @@
+int x, y, a, b, i, j;
+string zap;
+float teste,sss;
+int zapUM, zapDois;
+const string zapConstante;
+string zapConcat;
+
+zapConstante = "Isso é uma contante";
+println(zapConstante)
+println(93)
+
+int numeroZap;
+numeroZap = 666
+zapConcat = "Isso é outro teste " + numeroZap
+
+println(zapConcat)
+
+
+a = 5
+b = 6
+
+println("teste " + b)
+
+zap = "O zap zap zap zap zap"
+println(zap)
+println(a + b * 2)
+println((1+2)*3)
+
+if (2 > 1) {
+    println(666)
+    int c;
+    if (1 < 2) {
+        c = 777
+        println(c)
+    } else {
+        println(2222)
+    }
+} else {
+    println(1111)
+}
+
+i = 0
+while (i < 5) {
+    println(i)
+    i = i + 1
+}
+
+j = 0
+while (j < 10) {
+    if (j > 0) {
+        println(j)
+    }
+    j = j + 1
+}
+
+for(x=1; x < 6) {
+    println(zap)
+}
+
